@@ -29,48 +29,57 @@
 * **Visualization:** Power BI - 최종 분석 결과 대시보드
 * **Editor:** VS Code
 
-## 4. 프로젝트 여정 (My Project Journey & Process)
+## 4. Project Journey & Process Log
 
-Phase 0: Project Definition & Strategy (Novemver 2025)
-* 2025-11-11 : Defining the Goal.
-  - Context: As a recent University of Waterloo graduate(Math, Computational Mathematics & Mathematical Optimization - OR), my objective is to secure a high-impact role in consulting, finance, or tech analytics.
-  - The gap: Lacking of formal co-op experiance, I need a strong portfolio that demonstrates not just a technical skill,s but a structured, high-level approach to problem solving.
-* 2025-11-11 : Adopting a "Reverse Learning" Strategy.
-  - The Why: Decided againist passive learning(e.g., "watching online courses"). Instead, I am adopting a "Reverse Learning" methodology.
-  - The Process: 1. Define a complex, real world business problem. 2. Learn and apply the necessary tools ( SQL, Python, Power BI) in the process of solving it.
-  - The Value: This project's log itself; tracking all attempts, failures, and pivots; will be the core deliverable, proving my problem solving skills.
-* 2025-11-12 : Topic Selection & Scoping.
-  - Initial Brainstorm: Leveraged my personal domain interest (fashion, sneaker resale) and academic background (Optimization).
-  - The Pivot : I pivoted from a simple "how to profit" model to a far deeper business questions: "Why did Air Jordan 1 High resale market, once a 'guaranteed win,' completely collapse (bust)?"
-  - Why this topic is better : It's a real-world "bloom-and-bust" cycle analysis. It allows me to model market volatility, risk, and saturation; key problems that top consulting and finance firms solve today.
- 
-Phase 1: Data Sourcing & Environment Setup (Today)
-* 2025-11-12: Initial Data Reconnaissance (The First Blocker).
-  - Attempt 1: Searched Kaggle for existing datasets on "Air Jordan 1", "StockX", etc.
+### Phase 0: Project Definition & Strategy (November 2025)
 
-  - Result (Fail): No comprehensive, transaction-level datasets exist that cover the 2018-2025 "boom-and-bust" period.
+* **2025-11-11: Defining the Goal.**
+    * **Context:** As a recent University of Waterloo graduate (Math, Computational Mathematics & Mathematical Optimization - OR), my objective is to secure a high-impact role in consulting, finance, or tech analytics.
+    * **The Gap:** Lacking formal co-op experience, I need a strong portfolio that demonstrates not just technical skills, but a structured, high-level approach to problem-solving.
+* **2025-11-11: Adopting a "Reverse Learning" Strategy.**
+    * **The Why:** Decided against passive learning (e.g., "watching online courses"). Instead, I am adopting a **"Reverse Learning"** methodology.
+    * **The Process:** 1. Define a complex, real-world business problem. 2. Learn and apply the necessary tools (`SQL`, `Python`, `Power BI`) in the *process* of solving it.
+    * **The Value:** This project's log itself—tracking all attempts, failures, and pivots—will be the core deliverable, proving my problem-solving process.
+* **2025-11-12: Topic Selection & Scoping.**
+    * **Initial Brainstorm:** Leveraged my personal domain interest (fashion, sneaker resale) and academic background (Optimization).
+    * **The Pivot:** I pivoted from a simple "how to profit" model to a far deeper business question: **"Why did the Air Jordan 1 High resale market, once a 'guaranteed win,' completely collapse (bust)?"**
+    * **Why this topic is better:** It's a real-world "boom-and-bust" cycle analysis. It allows me to model market volatility, risk, and saturation—key problems that top consulting and finance firms solve daily.
 
-  - Insight: This failure is not a blocker; it's the project's first major opportunity. It forces the project to move from simple "analysis" to complex "data engineering." The value now lies in building the dataset from scratch.
+---
 
-* 2025-11-12: Strategic Pivot (The "Kream" Idea).
-  - Hypothesis: Instead of relying on StockX (global) alone, I will scrape data from Kream (the top Korean resale platform).
-  
-  - Value: This creates a unique and powerful analytical angle: Comparative Market Analysis. (e.g., "Did the bubble burst in Korea at the same time as the global market? Was there a time lag? Which factors mattered more in each region?")
+### Phase 1: Data Sourcing & Environment Setup (November 2025)
 
-* 2025-11-12: Environment & Tooling Setup.
+* **2025-11-12: Initial Data Reconnaissance (The First Blocker).**
+    * **Attempt 1:** Searched Kaggle for existing datasets on "Air Jordan 1", "StockX", etc.
+    * **Result (Initial Assessment):** Initially assessed that no *perfect*, single-file dataset existed for my specific Kream + AJ1 hypothesis.
+    * **Insight:** This perceived gap forced a valuable technical deep-dive.
 
-  - IDE: Set up Visual Studio Code (VS Code) (over the heavier Visual Studio) as the primary IDE, given its lightweight nature and powerful extensions for Python and data science.
+* **2025-11-12: Strategic Pivot 1 (The "Kream" Idea).**
+    * **Hypothesis:** Instead of relying on StockX (global) alone, I will scrape data from **Kream** (the top Korean resale platform).
+    * **Value:** This creates a unique and powerful analytical angle: **Comparative Market Analysis.** (e.g., "Did the bubble burst in Korea at the same time as the global market?")
 
-  - Repo: Created this GitHub repository to serve as the central, public 'source of truth' for all code, analysis, and this process log.
+* **2025-11-12: Environment & Tooling Setup.**
+    * **IDE:** Set up **Visual Studio Code (VS Code)** as the primary IDE.
+    * **Language/Tools:** Installed Python 3.14 (after troubleshooting `PATH` issues), VS Code Python Extension, and the `requests` library (`py -m pip install requests`).
+    * **Repo:** Created this GitHub repository to serve as the central, public 'source of truth' for all code, analysis, and this process log.
 
-* 2025-11-12: Next Step 
+* **2025-11-12: Technical Deep-Dive (Attempting to Scrape Kream).**
+    * **Blocker 1 (Login Wall):** Used Chrome Developer Tools (F12) to inspect the network. Discovered that key data (historical transactions) is protected behind a **login wall**.
+    * **Blocker 2 (Token Auth):** Identified that Kream uses `Authorization: Bearer` token (JWT) for authentication. Found the core API endpoint: `https://api.kream.co.kr/api/p/products/...`
+    * **Attempt 1 (Simple Headers):** Ran `scraper.py` (v1) using `requests` with a valid `Bearer` token and basic headers.
+        * **Result:** `Status Code: 500 (Internal Server Error)`.
+    * **Attempt 2 (Full Headers):** Hypothesized the `500` error was due to missing headers. Ran `scraper.py` (v2) with the *entire* header block from F12.
+        * **Result:** `Status Code: 500 (Internal Server Error)`.
+    * **Attempt 3 (Synced Headers):** Hypothesized the error was a mismatch between dynamic keys. Ran `scraper.py` (v3) with a freshly synced "set" of `authorization` token, `request_key`, and `x-kream-client-datetime`.
+        * **Result:** `Status Code: 500 (Internal Server Error)`.
 
-Beginning initial reconnaissance on Kream.co.kr.
-
-Using Chrome Developer Tools (F12) to inspect the Network tab (Fetch/XHR) to identify potential hidden APIs. This is the first step in designing the Python (Requests/BeautifulSoup) scraper. All findings will be logged here.
-
-
-
+* **2025-11-12: Current Analysis & Next Step.**
+    * **Conclusion:** The persistent `500` (Internal Server Error), instead of a `401` (Unauthorized), strongly implies:
+        1.  Our `authorization` token is likely *valid*.
+        2.  The server is *receiving* the request but *crashing* during processing.
+        3.  This is the hallmark of a sophisticated, server-side **anti-scraping system** that is detecting non-human patterns (e.g., via dynamic token/key mismatches, client fingerprinting).
+    * **Insight:** The existence of other "bots" (as I theorized) confirms a technical path exists, but it's likely not via simple `requests`. It probably involves advanced methods (e.g., mobile app API reverse-engineering).
+    * **Next Step:** Further investigation into Kream's anti-bot measures is required. [Pivot decision on hold]
 
 
 
