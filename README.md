@@ -82,7 +82,41 @@
     * **Next Step:** Further investigation into Kream's anti-bot measures is required. [Pivot decision on hold]
 
 
+---
 
+## Phase 2: Initial Data Analysis (EDA) with Power BI
+
+* **2025-11-14: Loading Sample Data.**
+    * **Action:** Loaded the sample dataset (`kream_83900.csv`) provided by my friend into Power BI Desktop. This file represents the transaction data for a single model (AJ1 Chicago 'Lost & Found').
+    * **Status:** This is just a sample; the full data collection for all AJ1 models is not yet complete.
+
+* **2025-11-14: Data Transformation (Power Query).**
+    * **Objective:** Clean the raw data so it can be used for analysis.
+    * **Challenge 1 (Price):** `price` column was text (e.g., "300,000원").
+    * **Solution:** Used **[Transform Data]** (Power Query). Used **[Replace Values]** to remove "원" and ",". Changed data type to "Whole Number".
+    * **Challenge 2 (Date):** `date` column was text.
+    * **Solution:** Changed data type to "Date".
+
+* **2025-11-14: Initial Visualization (First Insights).**
+    * **Action 1:** Created a **Line Chart** (`price` on Y-axis, `date` on X-axis).
+    * **Troubleshooting:** Had to fix Power BI's default behavior by setting the Y-axis to **[Don't summarize]** and the X-axis to use `date` (not 'Date Hierarchy').
+    * **Result 1:** Successfully visualized the price trend over time for this single product.
+    * **Action 2:** Added a **Slicer** visual linked to the `size` column.
+    * **Result 2:** Successfully created an interactive dashboard where I can filter the price trend by specific sneaker size.
+
+---
+
+## Phase 1.5: Data Collection (Refinement & Iteration)
+
+* **2025-11-14: Critical Finding (Data Quality Issue).**
+    * **The Problem:** During the analysis, I discovered a major flaw in the initial data extraction. The scraper program was outputting 3 columns (`size`, `price`, `date`). However, for items marked **"빠른 배송" (Fast Shipping)**, this text **overwrote the actual transaction date** in the `date` column.
+    * **Immediate Impact:** I had to manually delete these corrupted rows in Excel to make the Power BI import work, which resulted in significant **data loss**.
+
+* **2025-11-14: Strategic Decision (Scraper v2).**
+    * **The Goal:** Stop the data loss and make the data clean from the source.
+    * **The Plan:** I will modify (or have my friend modify) the scraping program to fix this bug.
+    * **Proposed Change:** The new program will be updated to output **4 columns** (e.g., `size`, `price`, `date`, `shipping_option`). This will correctly separate the "Fast Shipping" tag from the `date` column and preserve 100% of the data.
+    * **Next Step:** Pause full analysis in Power BI and return to the Python scraping phase to build a complete, clean dataset.
 
 
 
